@@ -26,6 +26,8 @@ def CheckJobComplete(jobId):
         response = client.get_document_text_detection(JobId=jobId)
         status = response["JobStatus"]
         print("Job status: {}".format(status))
+    #print("STATUS", status)
+    #status will print SUCCEEDED/FAILED
     return status
 
 def JobResults(jobId):
@@ -57,8 +59,7 @@ print("Started job with id: {}".format(jobId))
 if(CheckJobComplete(jobId)):
     response = JobResults(jobId)
     for resultPage in response:
-       
         for item in resultPage["Blocks"]:
-            
             if item["BlockType"] == "LINE":
+                # item["Text"] has the data
                 print ('\033[94m' + item["Text"] + '\033[0m')
