@@ -6,6 +6,7 @@ def get_kv_map(bucket, key):
     # process using image bytes
     client = boto3.client('textract')
     response = client.analyze_document(Document={'S3Object': {'Bucket': bucket, "Name": key}}, FeatureTypes=['FORMS'])
+    #analyze_document: Analyzes an input document for relationships between detected items (key, val) pairs => outputs block objects
     #TABLES, FORMS, LAYOUT
     #start_document_text_detection = pdf
     #analyze_document only jpg, png
@@ -20,9 +21,11 @@ def get_kv_map(bucket, key):
     for block in blocks:
         block_id = block['Id']
         block_map[block_id] = block
+        # block_map = {block id : block}
         if block['BlockType'] == "KEY_VALUE_SET":
             if 'KEY' in block['EntityTypes']:
                 key_map[block_id] = block
+                # keymap = {block id: block} (for only Entitly Types)
             else:
                 value_map[block_id] = block
 
@@ -76,17 +79,3 @@ for key, value in kvs.items():
     print(key, ":", value)
 
 
-# def lambda_handler(event, context):
-#     file_obj = event["Records"][0]
-#     bucket = unquote_plus(str(file_obj["s3"]["bucket"]["name"]))
-#     file_name = unquote_plus(str(file_obj["s3"]["object"]["key"]))
-#     #file_name ='filled_form.png'
-#     print(f'Bucket: {bucket}, file: {file_name}')
-#     key_map, value_map, block_map = get_kv_map( bucket, file_name)
-
-#     # Get Key Value relationship
-#     kvs = get_kv_relationship(key_map, value_map, block_map)
-#     print("\n\n== FOUND KEY : VALUE pairs ===\n")
-
-#     for key, value in kvs.items():
-#         print(key, ":", value)

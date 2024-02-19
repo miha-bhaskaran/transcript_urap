@@ -3,6 +3,10 @@ import time
 
 
 ## Textract APIs used - "start_document_text_detection", "get_document_text_detection"
+#StartTextDetection returns a job identifier (JobId) that you use to get the results of the operation.
+#GetDocumentTextDetection returns an array of Block objects.
+# Page => Block => Line => Word (type)
+
 def InvokeTextDetectJob(s3BucketName, objectName):
     response = None
     client = boto3.client('textract')
