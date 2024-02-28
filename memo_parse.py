@@ -5,14 +5,15 @@ from urllib.parse import unquote_plus
 def get_kv_map(bucket, key):
     # process using image bytes
     client = boto3.client('textract')
-    response = client.analyze_document(Document={'S3Object': {'Bucket': bucket, "Name": key}}, FeatureTypes=['FORMS'])
+    # query the response
+    response = client.analyze_document(Document={'S3Object': {'Bucket': bucket, "Name": key}}, FeatureTypes=['TABLES'])
     #analyze_document: Analyzes an input document for relationships between detected items (key, val) pairs => outputs block objects
     #TABLES, FORMS, LAYOUT
     #start_document_text_detection = pdf
     #analyze_document only jpg, png
     # Get the text blocks
     blocks = response['Blocks']
-    print(f'BLOCKS: {blocks}')
+    #print(f'BLOCKS: {blocks}')
 
     # get key and value maps
     key_map = {}
@@ -65,10 +66,12 @@ def get_text(result, blocks_map):
 
     return text
 bucket = "transcriptmiha"
-file_name = "trans.png"
+#PDF DOESNT WORK
+#file_name = "trans.png"
 #file_name = "transcript.pdf"
 #file_name = "sampleNotes.pdf"
-#file_name = "phoneMemo.png"
+file_name = "phoneMemo.png"
+#file_name = "uva_transcript.pdf"
 key_map, value_map, block_map = get_kv_map( bucket, file_name)
 
 

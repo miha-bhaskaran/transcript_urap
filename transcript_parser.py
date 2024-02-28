@@ -1,5 +1,7 @@
 import boto3
 import time
+import re
+import json
 
 
 ## Textract APIs used - "start_document_text_detection", "get_document_text_detection"
@@ -53,17 +55,38 @@ def JobResults(jobId):
                 nextToken = response['NextToken']
     return pages
 
+def ParseTextBlocks(blocks):
+    """
+    Parse the detected text blocks to find courses and grades.
+    This function needs to be customized based on the document's structure.
+    """
+    courses = []
+    for block in blocks:
+        if block["BlockType"] == "LINE":
+            text = block["Text"]
+            # Example pattern: CourseName ABC123 - Grade: A
+            match = re.search(r'([A-Za-z]+ [A-Za-z0-9]+) - Grade: ([A-F])', text)
+            if match:
+                course = match.group(1)
+                grade = match.group(2)
+                courses.append({"course": course, "grade": grade})
+    return courses
+
 # S3 Document Data
 s3BucketName = "transcriptmiha"
-documentName = "sampleNotes.pdf"
+#documentName = "sampleNotes.pdf"
+#documentName = "trans.png"
+documentName = "uva_transcript.pdf"
 
 # Function invokes
 jobId = InvokeTextDetectJob(s3BucketName, documentName)
 print("Started job with id: {}".format(jobId))
 if(CheckJobComplete(jobId)):
     response = JobResults(jobId)
+    all_courses = []
     for resultPage in response:
         for item in resultPage["Blocks"]:
             if item["BlockType"] == "LINE":
                 # item["Text"] has the data
-                print ('\033[94m' + item["Text"] + '\033[0m')
+                #print ('\033[94m' + item["Text"] + '\033[0m')
+
