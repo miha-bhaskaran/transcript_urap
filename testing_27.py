@@ -53,10 +53,10 @@ def table_regex(name, df):
 # Supports only PNG??
 bucketname = "transcriptmiha"
 #documentName = "sampleNotes.pdf"
-#filename = "trans.png"
+filename = "trans.png"
 #filename = "uva_transcript.pdf"
-#filename = "uva.png"
-filename = 'west_mich.png'
+#filename = 'west_mich.png'
+#filename = 'uva.png'
 tables = lambda_handler(bucketname, filename)
 
 for table_name, data in tables.items():
