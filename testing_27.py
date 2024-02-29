@@ -1,14 +1,11 @@
 import json
 import boto3
 import pandas as pd
-from pprint import pprint
+import re
+
 from parser_1 import (
-    extract_text,
     map_word_id,
-    extract_table_info,
-    get_key_map,
-    get_value_map,
-    get_kv_map,
+    extract_table_info
 )
 
 
@@ -26,44 +23,45 @@ def lambda_handler(bucketname, filename):
         FeatureTypes=["FORMS", "TABLES"],
     )
 
-    #print(json.dumps(response))
 
-    #raw_text = extract_text(response, extract_by="LINE")
     word_map = map_word_id(response)
     table = extract_table_info(response, word_map)
-    #key_map = get_key_map(response, word_map)
-    #value_map = get_value_map(response, word_map)
-    #final_map = get_kv_map(key_map, value_map)
 
-    #print(json.dumps(table))
-    #print(json.dumps(final_map))
-    #print(raw_text)
-    print(table)
     return (table)
 
-    #return {"statusCode": 200, "body": json.dumps("Thanks from Srce Cde!")}
+
 
 def table_to_csv(table_name, data):
-    # Convert the list of lists to a DataFrame
+
     df = pd.DataFrame(data[1:], columns=data[0])
-    
-    # Generate a CSV file name based on the table name
     csv_file_name = f"{table_name}.csv"
-    
-    # Export the DataFrame to CSV
-    df.to_csv(csv_file_name, index=False)
+
     print(f"Generated CSV: {csv_file_name}")
+    return csv_file_name, df
 
+def table_regex(name, df):
+    # capture anything that starts with cou and gr case insensitive
+    pattern = '(?i)(cou|gr|cla)\w*(\s+\w+)*|Gr(?:ade|d)?'
+    #pattern = '(?i)\b(cou|gr|cla)\w*(\s+\w+)*|Gr(?:ade|d)?'
 
-# Only png??
+ 
+    filtered_df = df.filter(regex=pattern, axis=1)
+
+    filtered_df.to_csv(name, index=False)
+    return filtered_df
+
+# Supports only PNG??
 bucketname = "transcriptmiha"
 #documentName = "sampleNotes.pdf"
 #filename = "trans.png"
 #filename = "uva_transcript.pdf"
-filename = "uva.png"
+#filename = "uva.png"
+filename = 'west_mich.png'
 tables = lambda_handler(bucketname, filename)
 
 for table_name, data in tables.items():
-    table_to_csv(table_name, data)
+    #print(table_name)
+    name, data_f = table_to_csv(table_name, data)
+    print(table_regex(name, data_f))
 
 
