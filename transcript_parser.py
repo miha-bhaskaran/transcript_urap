@@ -92,10 +92,13 @@ bucketname = "transcriptmiha"
 #filename = "uva_transcript.pdf"
 #filename = 'west_mich.png'
 # filename = "asu.pdf"
-# filename = "dickonson_uni.pdf"
+#filename = "dickonson_uni.pdf"
 # filename = "edmonds_community_college.pdf"
 # filename = "grand_rapids_community_college.png"
-filename = "taylor_unv.pdf"
+#filename = "taylor_unv.pdf"
+#filename = "transcript.pdf"
+# filename = "va_com_college.pdf"
+filename = "western_mihc_transcript.pdf"
 tables = lambda_handler(bucketname, filename)
 table_names = []
 
