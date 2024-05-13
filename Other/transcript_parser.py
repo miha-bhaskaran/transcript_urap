@@ -89,4 +89,3 @@ if(CheckJobComplete(jobId)):
             if item["BlockType"] == "LINE":
                 # item["Text"] has the data
                 #print ('\033[94m' + item["Text"] + '\033[0m')
-
