@@ -15,14 +15,13 @@ def pdfPngConverter(transcript_name, output_folder):
     zoom_y = 2.0  # vertical zoom
     mat = fitz.Matrix(zoom_x, zoom_y)  # zoom factor 2 in each dimension
 
-    #output_folder = 'trans' # CHANGE NAME FOLDER and put pdf name
-    #valid = "transcript_1.csv" #CHANGE
-    #transcript_name = 'transcripts/trans'
+  
 
     all_files = glob.glob(transcript_name + "*.pdf")
 
     # Ensure the output folder exists
     os.makedirs(output_folder, exist_ok=True)
+    print("HERE")
 
     for filename in all_files:
         doc = fitz.open(filename)  # open document
@@ -33,6 +32,6 @@ def pdfPngConverter(transcript_name, output_folder):
     print(transcript_name, "converted into a folder of pngs called: ", output_folder)
 
 
-#pdfPngConverter(transcript_name, output_folder)
+# pdfPngConverter(transcript_name, output_folder)
 
 # finished converting from pdf to png

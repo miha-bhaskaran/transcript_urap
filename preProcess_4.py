@@ -1,16 +1,11 @@
 import pandas as pd
 
-#file b is validation
+# file b is validation
 
 def find_matching_lines(file_a, file_b):
-
-     # CHANGE NAME FOLDER and put pdf name
     # Function to strip whitespace and quotes from each line
     def process_line(line):
-        #line = line.lower()
-        # Remove all instances of each character from anywhere in the string
-        # for char in ['"', "'", ",", " ", "`", "csv", "plain", "text"]:
-        for char in ['"', "'", ",", " ", "`"]:
+        for char in ['"', "'", " ", ',', "`"]:
             line = line.replace(char, '')
         return line
 
@@ -27,22 +22,12 @@ def find_matching_lines(file_a, file_b):
             lines_b.add(processed_line)
             line_count_b += 1  # Increment the counter for each line read
 
-    # Find intersection of both sets to get matching lines
-    matching_lines = lines_a.intersection(lines_b)
+    # Find lines in file_b that are not in file_a
+    unmatched_lines_b = lines_b - lines_a
 
-    non_matching_lines = lines_a - lines_b
+    # Calculate the match percentage
+    match_percentage = (1 - len(unmatched_lines_b) / line_count_b) * 100
 
-    # Print non-matching lines
-    print("Non-matching lines in file A:")
-    for line in non_matching_lines:
-        print(line)
-
- 
-
-    print("Match percentage: ",len(matching_lines)/line_count_b * 100, "%")
+    print("Match percentage: ", match_percentage, "%")
 
 
-    
-
-
-#find_matching_lines('test1.csv',  'test2.csv')

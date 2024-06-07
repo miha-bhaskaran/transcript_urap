@@ -39,14 +39,14 @@ def vision(output_folder):
         base64_image = encode_image(image_path)
 
         payload = {
-            "model": "gpt-4-vision-preview",
+            "model": "gpt-4o-2024-05-13",
             "messages": [
                 {
                     "role": "user",
                     "content": [
                         {
                             "type": "text",
-                            "text": "Extract only course ids and grades earned from the image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-. Do not miss any characters. Include special characters"
+                            "text": "Extract only course ids and grades earned from the image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-.  Include special characters. Do not add any extra characters."
                         },
                         {
                             "type": "image_url",
@@ -57,7 +57,7 @@ def vision(output_folder):
                     ]
                 }
             ],
-            "max_tokens": 300
+            "max_tokens": 400
         }
 
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
