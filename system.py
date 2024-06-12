@@ -1,38 +1,38 @@
-from pdf_png_1 import pdfPngConverter
-from vision_script_2 import vision
-from csv_concat_3 import concatenate_csv_files
-from preProcess_4 import find_matching_lines
-from aws_script_2 import process_images_in_folder
-from postProcessOpenAI_5 import extract_course_info_2
+from pdfToPng import pdf_png_conversion
+from methodVisionZSL import vision_ZSL
+from csvConcatenation import concatenate_csv_files
+from matchPercentage import match_percentage
+from methodAWS import process_images_in_folder
+from postProcessVision import extract_course_info
 from postProcessRegex import regex_post_process
-from postProcess_4o import post_process_4o
-from gpt_4o_2 import vision_4
+from postProcessOSL import post_process_OSL
+from methodVisionOSL import method_vision_osl
 
 
-def visionNoZSL(transcript_name, output_folder, orig):
-    output_folder = output_folder+"_no_zsl"
+def method_vision_ZSL(transcript_name, output_folder, orig):
+    output_folder = output_folder + "ZSL"
+
     # STEP 1: Convert PDF to Folder of PNGs
-    pdfPngConverter(transcript_name, output_folder)
+    pdf_png_conversion(transcript_name, output_folder)
    
-
     #STEP 2: Run Vision or AWS on folder
-
-    vision(output_folder)
+    vision_ZSL(output_folder)
 
     #STEP 3: Concatenate all PNGs
     concatenate_csv_files(output_folder)
 
     #STEP 4: Find match percentage of pre-preprocess
     print(output_folder, "PRE PROCESS MATCH:")
-    find_matching_lines(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
 
     #STEP 5: Find match percentage for post-processed numbers
-    post(output_folder ,orig)
+    post_process_method(output_folder ,orig)
 
-def awsBoto(transcript_name, output_folder, orig):
+def method_awsBoto(transcript_name, output_folder, orig):
+
     output_folder = output_folder + "awsBoto"
     # STEP 1: Convert PDF to Folder of PNGs
-    pdfPngConverter(transcript_name, output_folder)
+    pdf_png_conversion(transcript_name, output_folder)
     
 
     #STEP 2: Run Vision or AWS on folder
@@ -44,54 +44,55 @@ def awsBoto(transcript_name, output_folder, orig):
 
     #STEP 4: Find match percentage of pre-preprocess
     print(output_folder, "PRE PROCESS MATCH:")
-    find_matching_lines(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
 
     #STEP 5: Find match percentage for post-processed numbers
-    post(output_folder ,orig)
+    post_process_method(output_folder ,orig)
 
-def visionZSL(transcript_name, output_folder, orig):
-    
-    output_folder = output_folder + "ZSL"
+def method_visioOSL(transcript_name, output_folder, orig):
+
+    output_folder = output_folder + "OSL"
     # STEP 1: Convert PDF to Folder of PNGs
-    pdfPngConverter(transcript_name, output_folder)
+    pdf_png_conversion(transcript_name, output_folder)
    
 
     #STEP 2: Run Vision or AWS on folder
 
-    vision_4(output_folder, 'output_png.csv', 'transcriptmiha')
+    method_vision_osl(output_folder, 'input_ex.png', 'output_png.csv')
 
     #STEP 3: Concatenate all PNGs
     concatenate_csv_files(output_folder)
 
     #STEP 4: Find match percentage of pre-preprocess
     print(output_folder, "PRE PROCESS MATCH:")
-    find_matching_lines(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
 
     #STEP 5: Find match percentage for post-processed numbers
-    post(output_folder ,orig)
+    post_process_method(output_folder, orig)
 
 
     
-def post(output_folder, orig):
+def post_process_method(output_folder, orig):
 
     print(output_folder, "open 4o ---------------------------------------------------------------------------")
-    post_process_4o('input_example.csv', 'output_example.csv', output_folder)
-    find_matching_lines(output_folder + '/' +'Final_post_processed_gpt4o.csv', 'validation/'+ orig + '.csv')
+    post_process_OSL('input_example.csv', 'output_example.csv', output_folder)
+    match_percentage(output_folder + '/' +'Final_post_processed_gpt4o.csv', 'validation/'+ orig + '.csv')
     print(output_folder, "---------------------------------------------------------------------------")
     #REGEX SYSTEM
     regex_post_process(output_folder)
     # post_process_2 - open ai + regex
     print(output_folder, "regex ---------------------------------------------------------------------------")
-    find_matching_lines(output_folder + '/' +'FINAL_post_process_REGEX.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' +'FINAL_post_process_REGEX.csv', 'validation/'+ orig + '.csv')
+   
     print("---------------------------------------------------------------------------------------------")
-    extract_course_info_2(output_folder)
+    extract_course_info(output_folder)
     # post_process_2 - open ai + open ai
     print(output_folder, "OPEN AI  ---------------------------------------------------------------------------")
-    find_matching_lines(output_folder + '/' +'FINAL_post_process_OPEN_AI.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' +'FINAL_post_process_OPEN_AI.csv', 'validation/'+ orig + '.csv')
     print("---------------------------------------------------------------------------------------------")
     # FINAL_post_process_3 - open ai + open ai + regex
     print(output_folder, "OPEN AI  + regex")
-    find_matching_lines(output_folder + '/' +'FINAL_post_process_COMBO.csv', 'validation/'+ orig + '.csv')
+    match_percentage(output_folder + '/' +'FINAL_post_process_COMBO.csv', 'validation/'+ orig + '.csv')
     print("---------------------------------------------------------------------------------------------")
 
 
@@ -103,8 +104,8 @@ transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/
 
 
 for i in range(len(output_folder)):
-    visionNoZSL(transcript_name[i], output_folder[i], output_folder[i])
-    #awsBoto(transcript_name[i], output_folder[i], output_folder[i])
-    #visionZSL(transcript_name[i], output_folder[i], output_folder[i])
+    method_vision_ZSL(transcript_name[i], output_folder[i], output_folder[i])
+    method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
+    method_visioOSL(transcript_name[i], output_folder[i], output_folder[i])
 
     #post(transcript_name[i], output_folder[i])
