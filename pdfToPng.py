@@ -27,3 +27,7 @@ def pdf_png_conversion(transcript_name, output_folder):
     print(transcript_name, "converted into a folder of pngs called: ", output_folder)
 
 
+# output_folder = ['asu', 'dickonson_uni', 'edmonds', 'g_r', 'taylor','trans', 'uva', 'va', 'west_mich']
+# transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/g_r', 'transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
+# for i in range(len(output_folder)):
+#     pdf_png_conversion(transcript_name[i], output_folder[i])

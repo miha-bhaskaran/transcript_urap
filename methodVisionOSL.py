@@ -6,6 +6,7 @@ import glob
 import fitz
 import pandas as pd
 from prompts import OPENAI_API_KEY, SYSTEM_PROMPT, get_user_prompt, USER_PROMPT_EXAMPLE
+from text_extract import extract_after_backslash
 
 # Function to encode the image
 def encode_image(image_path):
@@ -19,7 +20,7 @@ def read_example_csv(csv_path):
         return [row for row in reader]
 
 # Main function that takes an example image and example CSV for one-shot learning
-def method_vision_osl(output_folder, example_image_path, example_csv_path):
+def method_vision_osl(output_folder, example_image_path, example_csv_path, transcript_name):
     # Read the example CSV file
     example_csv_data = read_example_csv(example_csv_path)
     example_csv_text = "\n".join([", ".join(row) for row in example_csv_data])
@@ -37,7 +38,11 @@ def method_vision_osl(output_folder, example_image_path, example_csv_path):
 
     for image_path in image_files:
         # Getting the base64 string
-        base64_image = encode_image(image_path)
+        # base64_image = encode_image(image_path)
+        # print( "HERE",image_path)
+        # return
+        image_url = extract_after_backslash(image_path)
+
 
         payload = {
             "model": "gpt-4o-2024-05-13",
@@ -49,21 +54,22 @@ def method_vision_osl(output_folder, example_image_path, example_csv_path):
                 },
                 {
                     "role": "user",
-                    "content": "Below is the example image:",
+                    "content": "This is an example of an image:",
                     "name": "example_image",
                     "type": "image",
-                    "image_url": f"data:image/jpeg;base64,{example_image_base64}"
+                    "image_url": "https://transcriptmiha.s3.us-east-2.amazonaws.com/input_ex.png"
                 },
                 {
                     "role": "user",
-                    "content": "Below is the image to process:",
+                    "content": "Below is the image you must process:",
                     "name": "process_image",
                     "type": "image",
-                    "image_url": f"data:image/jpeg;base64,{base64_image}"
+                    "image_url": f"https://transcriptmiha.s3.us-east-2.amazonaws.com/{image_path}"
                 }
             ],
             "max_tokens": 400
         }
+       
 
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
         

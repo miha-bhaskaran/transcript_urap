@@ -8,7 +8,7 @@ SYSTEM_PROMPT = {
     "content": "You are a helpful assistant that extracts course ID and grades from the given input and outputs it in a CSV format."
 }
 
-USER_PROMPT_EXAMPLE = "Here is an example of an input and its output:\n\nExample OUTPUT:\n{example_csv_text}\n\nUsing this example, extract course ids and grades earned from the following image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-. Include special characters. Do not add any extra characters."
+USER_PROMPT_EXAMPLE = "Here is an example of the formatting of a desired output:\n\nExample OUTPUT:\n{example_csv_text}\n\nUsing this example, extract course ids and grades earned from the following image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-. Include special characters. Do not add any extra characters."
 
 USER_PROMPT_EXAMPLE_IMAGE = {
     "role": "user",
@@ -25,6 +25,10 @@ USER_PROMPT_PROCESS_IMAGE = {
     "type": "image",
     "image_url": None  # This will be set dynamically
 }
+
+SYSTEM_PROMPT_ZSL = "Extract only course ids and grades earned from the image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-.  Include special characters. Do not add any extra characters."
+
+
 def get_user_prompt(chunk):
     return f"""
     Given the following cleaned CSV data, extract and list all course IDs and the corresponding grades. nUsing this example, extract course ids and grades earned from the following image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-. Include special characters. Do not add any extra characters.

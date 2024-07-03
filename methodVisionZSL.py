@@ -4,6 +4,7 @@ import requests
 import csv
 import glob, sys, fitz
 import pandas as pd
+from prompts import SYSTEM_PROMPT_ZSL
 
 
 # OpenAI API Key
@@ -46,7 +47,7 @@ def vision_ZSL(output_folder):
                     "content": [
                         {
                             "type": "text",
-                            "text": "Extract only course ids and grades earned from the image and output them in CSV format without any additional explanations or text. Capture the course name exactly. Grades are typically A,B,C,D,F, P, NP with +/-.  Include special characters. Do not add any extra characters."
+                            "text": SYSTEM_PROMPT_ZSL
                         },
                         {
                             "type": "image_url",
