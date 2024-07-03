@@ -7,6 +7,7 @@ from postProcessVision import extract_course_info
 from postProcessRegex import regex_post_process
 from postProcessOSL import post_process_OSL
 from methodVisionOSL import method_vision_osl
+from huggingFaceMethod import hugging_method
 
 
 def method_vision_ZSL(transcript_name, output_folder, orig):
@@ -68,7 +69,25 @@ def method_visioOSL(transcript_name, output_folder, orig):
 
     #STEP 5: Find match percentage for post-processed numbers
     post_process_method(output_folder, orig)
+def method_hugging(transcript_name, output_folder, orig):
 
+    output_folder = output_folder
+    # STEP 1: Convert PDF to Folder of PNGs
+    pdf_png_conversion(transcript_name, output_folder)
+   
+    #STEP 2: Run Vision or AWS on folder
+    
+    hugging_method(output_folder)
+
+    #STEP 3: Concatenate all PNGs
+    concatenate_csv_files(output_folder)
+     
+    #STEP 4: Find match percentage of pre-preprocess
+    print(output_folder, "PRE PROCESS MATCH:")
+    match_percentage(output_folder + '/' + output_folder + '_combined.csv', 'validation/'+ orig + '.csv')
+
+    #STEP 5: Find match percentage for post-processed numbers
+    post_process_method(output_folder, orig)
 
     
 def post_process_method(output_folder, orig):
@@ -104,6 +123,7 @@ transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/
 for i in range(len(output_folder)):
     # method_vision_ZSL(transcript_name[i], output_folder[i], output_folder[i])
     # method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
-    method_visioOSL(transcript_name[i], output_folder[i], output_folder[i])
+    # method_visioOSL(transcript_name[i], output_folder[i], output_folder[i])
+    method_hugging(transcript_name[i], output_folder[i], output_folder[i])
 
     #post(transcript_name[i], output_folder[i])
