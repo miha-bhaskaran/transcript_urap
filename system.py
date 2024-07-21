@@ -113,11 +113,11 @@ def post_process_method(output_folder, orig):
     print("---------------------------------------------------------------------------------------------")
 
 
-output_folder = ['asu', 'dickonson_uni', 'edmonds', 'g_r', 'taylor','trans', 'uva', 'va', 'west_mich']
-transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/g_r', 'transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
+# output_folder = ['asu', 'dickonson_uni', 'edmonds', 'g_r', 'taylor','trans', 'uva', 'va', 'west_mich']
+# transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/g_r', 'transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
 
-# output_folder = [ 'dickonson_uni', 'edmonds', 'taylor', 'va']
-# transcript_name = ['transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/taylor', 'transcripts/va']
+output_folder = [ 'taylor','trans', 'uva', 'va', 'west_mich']
+transcript_name = ['transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
 
 
 for i in range(len(output_folder)):
