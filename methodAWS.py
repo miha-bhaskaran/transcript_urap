@@ -3,7 +3,7 @@ import csv
 import os
 
 def extract_text_from_image(image_path):
-    # Initialize the Textract client
+
     textract = boto3.client('textract')
 
     # Load the image
@@ -69,7 +69,7 @@ def save_tables_to_csv(tables, csv_filename):
         for table in tables:
             for row in table:
                 csvwriter.writerow(row)
-            csvwriter.writerow([])  # Add an empty row between tables
+            csvwriter.writerow([])  
 
 def process_images_in_folder(folder_path):
     # List all files in the folder
@@ -77,16 +77,8 @@ def process_images_in_folder(folder_path):
         if filename.lower().endswith('.png'):
             image_path = os.path.join(folder_path, filename)
             csv_filename = os.path.join(folder_path, f"{os.path.splitext(filename)[0]}.csv")
-
-            # Extract text from image
             response = extract_text_from_image(image_path)
-
-            # Extract tables
             tables = extract_tables_from_response(response)
-
-    
-
-            # Save the tables to a CSV file
             save_tables_to_csv(tables, csv_filename)
             print(f"Extracted tables from {filename} have been saved to {csv_filename}")
 

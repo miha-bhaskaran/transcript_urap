@@ -70,9 +70,3 @@ def hugging_method(output_folder):
         setup_and_run_example(prompt, image_path)
 
 
-
-# # Call the run_example function
-# prompt = "<OCR>"
-# # setup_and_run_example(prompt, 'https://transcriptmiha.s3.us-east-2.amazonaws.com/trans/page-2.png')
-# setup_and_run_example(prompt, 'png-2.png')
-

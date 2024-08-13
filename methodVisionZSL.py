@@ -1,4 +1,5 @@
 import os
+import json
 import base64
 import requests
 import csv
@@ -8,7 +9,9 @@ from prompts import SYSTEM_PROMPT_ZSL
 
 
 # OpenAI API Key
-api_key = "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"  
+with open("config.json", "r") as config_file:
+    config = json.load(config_file)
+    api_key = config["OPENAI_API_KEY"] 
 
 # To get better resolution
 zoom_x = 2.0  # horizontal zoom

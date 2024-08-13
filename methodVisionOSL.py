@@ -3,7 +3,6 @@ import base64
 import requests
 import csv
 import glob
-import fitz
 import pandas as pd
 from prompts import OPENAI_API_KEY, SYSTEM_PROMPT, get_user_prompt, USER_PROMPT_EXAMPLE
 from text_extract import extract_after_backslash
@@ -21,14 +20,8 @@ def read_example_csv(csv_path):
 
 # Main function that takes an example image and example CSV for one-shot learning
 def method_vision_osl(output_folder, example_image_path, example_csv_path, transcript_name):
-    # Read the example CSV file
     example_csv_data = read_example_csv(example_csv_path)
     example_csv_text = "\n".join([", ".join(row) for row in example_csv_data])
-
-    # Encode the example image
-    example_image_base64 = encode_image(example_image_path)
-
-    # Directory containing the images
     image_files = glob.glob(os.path.join(output_folder, '*.png'))
 
     headers = {
@@ -37,13 +30,6 @@ def method_vision_osl(output_folder, example_image_path, example_csv_path, trans
     }
 
     for image_path in image_files:
-        # Getting the base64 string
-        # base64_image = encode_image(image_path)
-        # print( "HERE",image_path)
-        # return
-        image_url = extract_after_backslash(image_path)
-
-
         payload = {
             "model": "gpt-4o-2024-05-13",
             "messages": [

@@ -1,21 +1,16 @@
-import os
 import openai
-import re
+import json
 
-# OpenAI API Key
-api_key = "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"  # Replace with your actual API key
-openai.api_key = api_key
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+openai.api_key = config['OPENAI_API_KEY']
 
 
 def remove_backtick_symbols(file_path):
-    # Read the file content
     with open(file_path, 'r') as file:
         content = file.read()
-    
-    # Remove backtick symbols
     cleaned_content = content.replace('`', '')
-
-    # Write the cleaned content back to the file
     with open(file_path, 'w') as file:
         file.write(cleaned_content)
 

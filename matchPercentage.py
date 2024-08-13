@@ -15,7 +15,7 @@ def match_percentage(file_a, file_b):
 
     # Read all lines from the second file, processing each one and count them
     lines_b = set()
-    line_count_b = 0  # Initialize the line counter for file b
+    line_count_b = 0  
     with open(file_b, 'r') as f:
         for line in f:
             processed_line = process_line(line)
@@ -29,5 +29,3 @@ def match_percentage(file_a, file_b):
     match_percentage = (1 - len(unmatched_lines_b) / line_count_b) * 100
 
     print("Match percentage: ", match_percentage, "%")
-
-

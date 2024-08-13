@@ -1,8 +1,11 @@
 import openai
-
-# Initialize the OpenAI API
+import json
 import re
-openai.api_key = 'sk-proj-D8cDwYGshUI9e4Qp7f4sT3BlbkFJIA67ZqaOxnvQ0Pc8hZT8'
+
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+openai.api_key = config['OPENAI_API_KEY_1']
 
 def regex_post_process(folder_name):
     path_to_open = folder_name + "/" + folder_name + "_combined.csv"
