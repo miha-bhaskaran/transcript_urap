@@ -5,9 +5,9 @@ import pandas as pd
 def match_percentage(file_a, file_b):
     # Function to strip whitespace and quotes from each line
     def process_line(line):
-        for char in ['"', "'", " ", ',', "`"]:
+        for char in ['"', "'", ',', "`"]:
             line = line.replace(char, '')
-        return line
+        return line.strip()
 
     # Read all lines from the first file, processing each one
     with open(file_a, 'r') as f:
@@ -25,7 +25,14 @@ def match_percentage(file_a, file_b):
     # Find lines in file_b that are not in file_a
     unmatched_lines_b = lines_b - lines_a
 
+    unmatched_lines_b.discard('CourseGrade')
+
     # Calculate the match percentage
     match_percentage = (1 - len(unmatched_lines_b) / line_count_b) * 100
+
+    if unmatched_lines_b:
+        print("\nUnmatched lines from file_b:", "FILE A:", file_a, "FILE B", file_b)
+        for line in unmatched_lines_b:
+            print(line)
 
     print("Match percentage: ", match_percentage, "%")
