@@ -2,53 +2,48 @@ import os
 import base64
 import requests
 import csv
-from PIL import Image
 
 def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
-def extract_tables_with_claude(api_key, image_path):
+def extract_tables_with_gpto1(api_key, image_path):
     image_base64 = encode_image_to_base64(image_path)
 
     headers = {
-    "x-api-key": "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",
-    "Content-Type": "application/json",
-    "anthropic-version": "2023-06-01"
-}
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
 
     data = {
-        "model": "claude-3-7-sonnet-20250219",  # Sonnet model
+        "model": "gpt-4o",  # OpenAI's GPT-4o
         "messages": [
             {
                 "role": "user",
                 "content": [
                     {
                         "type": "text",
-                        "text": "Extract all tables from this image and return each as rows in CSV format. Only return plain CSV-formatted text."
+                        "text": "Extract all tables from this image and return each table as plain CSV-formatted rows, separated by empty lines."
                     },
                     {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": "image/png",
-                            "data": image_base64
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/png;base64,{image_base64}"
                         }
                     }
                 ]
             }
         ],
-        "max_tokens": 4096,
-        "temperature": 0.2
+        "max_tokens": 4096
     }
 
-    response = requests.post("https://api.anthropic.com/v1/messages", headers=headers, json=data)
+    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=data)
     result = response.json()
 
     try:
-        print("Raw Claude response:")
+        print("Raw GPT-4o response:")
         print(result)
-        text_response = result["content"][0]["text"]
+        text_response = result["choices"][0]["message"]["content"]
         tables = []
         current_table = []
         for line in text_response.strip().splitlines():
@@ -63,7 +58,7 @@ def extract_tables_with_claude(api_key, image_path):
             tables.append(current_table)
         return tables
     except Exception as e:
-        print("Error parsing Claude response:", e)
+        print("Error parsing GPT-4o response:", e)
         return []
 
 def save_table_to_csv(table, csv_path):
@@ -72,16 +67,15 @@ def save_table_to_csv(table, csv_path):
         for row in table:
             writer.writerow(row)
 
-def methodClaude(folder_path, api_key, output_path):
-    
+def methodO1(folder_path, api_key, output_path):
     for filename in os.listdir(folder_path):
         if filename.lower().endswith(".png"):
             image_path = os.path.join(folder_path, filename)
-            print(f"Processing {filename} with Claude Sonnet...")
+            print(f"Processing {filename} with GPT-4o...")
 
-            tables = extract_tables_with_claude(api_key, image_path)
+            tables = extract_tables_with_gpto1(api_key, image_path)
             for i, table in enumerate(tables):
-                csv_name = f"{os.path.splitext(filename)[0]}_claude_table_{i + 1}.csv"
+                csv_name = f"{os.path.splitext(filename)[0]}_gpto1_table_{i + 1}.csv"
                 csv_path = os.path.join(output_path, csv_name)
                 save_table_to_csv(table, csv_path)
                 print(f"Saved table {i + 1} to {csv_path}")

@@ -1,6 +1,3 @@
-Here is the extracted data in the desired format:
-
-
 Course,Grade:
 CON 501,NR
 CON 598,NR
@@ -59,3 +56,22 @@ CON 101-M,A
 GLG 101-M,A
 GLG 103-M,A
 STP 226-M,A
+ANT 382,B+
+NUR 344,A
+ENG 312,A+
+NUR 387,S
+NUR 444,A+
+HSM 422,B
+COM 306,A
+NUR 325,A-
+BIO 350,A+
+HSM 301,C
+HSM 411,C
+NUR 313,A+
+NUR 390,A
+SOC 110,A-
+NUR 314,A-
+ENG 310,A-
+SOC 290,A
+HIS 102,A
+NUR 455,A
