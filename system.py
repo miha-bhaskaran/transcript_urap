@@ -9,6 +9,7 @@ from postProcessOSL import post_process_OSL
 from methodVisionOSL import method_vision_osl
 from huggingFaceMethod import hugging_method
 from methodExtractTable import extractTable
+from methodClaude import methodClaude
 
 
 def method_vision_ZSL(transcript_name, output_folder, orig):
@@ -117,6 +118,34 @@ def method_extractTable(transcript_name, output_folder, orig):
     #STEP 5: Find match percentage for post-processed numbers
     post_process_method(output_folder ,orig)
 
+
+# HERE
+
+def method_claude(transcript_name, output_folder, orig):
+
+   
+    output_folder = output_folder + "claude"
+    # STEP 1: Convert PDF to Folder of PNGs
+   
+    pdf_png_conversion(transcript_name, output_folder)
+    api_key= "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"
+    
+    #STEP 2: Run claude
+    methodClaude(output_folder, api_key, output_folder)
+
+    
+
+    #STEP 3: Concatenate all PNGs
+    concatenate_csv_files(output_folder)
+
+   
+
+    #STEP 4: Find match percentage of pre-preprocess
+    print(output_folder, "PRE PROCESS MATCH:")
+    match_percentage(output_folder + '/' + output_folder + '_combined.csv', 'testing_validation/'+ orig + '.csv')
+
+    # #STEP 5: Find match percentage for post-processed numbers
+    post_process_method(output_folder ,orig)
     
 def post_process_method(output_folder, orig):
 
@@ -147,8 +176,8 @@ def post_process_method(output_folder, orig):
     print(output_folder, "---------------------------------------------------------------------------")
  
 
-output_folder = ['asu', 'dickonson_uni', 'edmonds', 'g_r', 'taylor','trans', 'uva', 'va', 'west_mich']
-transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/g_r', 'transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
+# output_folder = ['asu', 'dickonson_uni', 'edmonds', 'g_r', 'taylor','trans', 'uva', 'va', 'west_mich']
+# transcript_name = ['transcripts/asu', 'transcripts/dickonson_uni', 'transcripts/edmonds', 'transcripts/g_r', 'transcripts/taylor','transcripts/trans', 'transcripts/uva', 'transcripts/va', 'transcripts/west_mich']
 
 
 
@@ -167,10 +196,12 @@ transcript_name = ['testing_transcripts/herkimer_SUNY']
 
 for i in range(len(output_folder)):
     
-    method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
+    #method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
     # method_visioOSL(transcript_name[i], output_folder[i], output_folder[i])
     # method_hugging(transcript_name[i], output_folder[i], output_folder[i])
              
     # method_extractTable(transcript_name[i], output_folder[i], output_folder[i])
+    method_claude(transcript_name[i], output_folder[i], output_folder[i])
+
 
     #post(transcript_name[i], output_folder[i])
