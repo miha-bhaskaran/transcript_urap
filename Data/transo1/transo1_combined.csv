@@ -1,0 +1,122 @@
+```
+Institution,Units
+Ohlone College,9.000
+Mission College,13.000
+Totals:,22.000
+Advanced Placement (AP),29.480
+Total Exam Units:,29.480
+BIOENG 26 Introduction to Bioengineering,1P,0.0
+COMPSCI 61C Great Ideas of Computer Architecture (Machine Structures),4B+,13.2
+DATA C100 Principles & Techniques of Data Science,4A-,14.8
+DATA 198 Directed Group Studies for Advanced Undergraduates,1P,0.0
+SCANDIN 60 Heroic Legends of the North,4B+,13.2
+ANTHRO 2AC Introduction to Archaeology,4A,16
+COMPSCI 70 Discrete Mathematics and Probability Theory,4B,12
+COMPSCI 197 Field Study,1P,0.0
+DATA C8 Foundations of Data Science,4A,16
+COMPSCI 36 CS Scholars Seminar: The Educational Climate in CS & CS61A technical discussions,2P,0.0
+COMPSCI 61A The Structure and Interpretation of Computer Programs,4B,12
+COMPSCI 197 Field Study,1P,0.0
+COMPSCI 199 Supervised Independent Study,2P,0.0
+EECS 16A Designing Information Devices and Systems I,4B,12
+ENGIN 98 Directed Group Studies for Lower Division Undergraduates,1P,0.0
+POLSCI 5 Introduction to International Relations,4P,0.0
+COMPSCI 61B Data Structures,4A,16
+COMPSCI 197 Field Study,1P,0.0
+EECS 16B Designing Information Devices and Systems II,4B+,13.2
+MUSIC 29 Music Now,4A,16
+COMPSCI 161 Computer Security,4A,16
+COMPSCI 170 Efficient Algorithms and Intractable Problems,4B,12
+DEMOG 180 Social Networks,4A-,14.8
+UGBA 135 Personal Financial Management,2P,0.0
+DATA C104 Human Contexts and Ethics of Data - DATA/History/STS,4—,—
+DATA 198 Directed Group Studies for Advanced Undergraduates,1—,0.0
+EECS 151 Introduction to Digital Design and Integrated Circuits,3—,—
+EECS 151LB Field-Programmable Gate Array Laboratory,2—,—
+SOCIOL 113 Sociology of Education,4—,—
+```
+CON 501,NR
+CON 598,NR
+CON 540,NR
+CON 557,NR
+CON 589,NR
+CON 598,NR
+CEE 340-M,A
+CON 310-M,A
+CON 383-M,A
+CON 424-M,B
+CON 468-M,A
+CON 494-M,A
+GCU 441-M,W
+PUP 452-M,W
+PUP 501-M,A
+PUP 520-M,A
+PUP 524-M,A
+PUP 531-M,W
+PUP 598-M,W
+PUP 598-M,W
+PUP 622-M,W
+CON 377-M,A
+CON 389-M,A
+CON 450-M,A
+CON 453-M,A
+CON 471-M,A
+CON 495-M,B
+BIO 494,A-
+PUP 430,A
+CCS 101-M,W
+CON 455-M,A
+CON 463-M,A
+CON 477-M,A
+CON 496-M,A
+CON 598,A+
+CON 598,A
+CON 243-M,A
+ACC 230-M,B
+CON 221-M,B
+CON 252-M,A
+CON 341-M,B
+ECE 294-M,A
+GNB 411,E
+HIS 306,E
+JUS 100,E
+PHI 103,B
+POS 170,E
+CON 251-M,A
+CON 273-M,A
+CON 323-M,A
+CON 345-M,A
+CON 371-M,A
+COM 225-M,B
+CON 101-M,A
+GLG 101-M,A
+GLG 103-M,A
+STP 226-M,ABIOENG 26,P
+COMPSCI 36,P
+COMPSCI 61A,B
+COMPSCI 197,P
+COMPSCI 199,P
+EECS 16A, B
+ENGIN 98, P
+POLSCI 5, P
+COMPSCI 61B, A
+COMPSCI 197, P
+EECS 16B, B+
+MUSIC 29, A
+ANTHRO 2AC, A
+COMPSCI 70, B
+COMPSCI 197, P
+DATA C8, A
+COMPSCI 61C, B+
+DATA C100, A-
+DATA 198, P
+SCANDIN 60, B+
+COMPSCI 161, A
+COMPSCI 170, B
+DEMOG 180, A-
+UGBA 135, P
+DATA C104, -
+DATA 198,  -
+EECS 151,  -
+EECS 151LB, -
+SOCIOL 113, -

@@ -1,81 +1,75 @@
 import os
-import base64
-import requests
 import csv
+import openai
+from PyPDF2 import PdfReader
 
-def encode_image_to_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
 
-def extract_tables_with_gpto1(api_key, image_path):
-    image_base64 = encode_image_to_base64(image_path)
+def extract_text_with_pypdf2(pdf_path):
+    reader = PdfReader(pdf_path)
+    full_text = ""
+    for page in reader.pages:
+        full_text += page.extract_text() + "\n"
+    return full_text.strip()
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
 
-    data = {
-        "model": "gpt-4o",  # OpenAI's GPT-4o
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Extract all tables from this image and return each table as plain CSV-formatted rows, separated by empty lines."
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/png;base64,{image_base64}"
-                        }
-                    }
-                ]
-            }
-        ],
-        "max_tokens": 4096
-    }
+def extract_tables_with_gpt4o_text(api_key, pdf_text):
+    openai.api_key = api_key
 
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=data)
-    result = response.json()
+    prompt = f"""
+Extract all tables from the following transcript and return each table as plain CSV-formatted rows.
+Separate tables with empty lines. No explanations or extra commentary.
+
+Transcript:
+{pdf_text}
+"""
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=4096,
+        temperature=0.3,
+    )
+
+    tables = []
+    current_table = []
 
     try:
-        print("Raw GPT-4o response:")
-        print(result)
-        text_response = result["choices"][0]["message"]["content"]
-        tables = []
-        current_table = []
+        text_response = response.choices[0].message["content"]
         for line in text_response.strip().splitlines():
-            if line.strip() == "":
+            if not line.strip():
                 if current_table:
                     tables.append(current_table)
                     current_table = []
             else:
-                row = [cell.strip() for cell in line.strip().split(",")]
+                row = [cell.strip() for cell in line.split(",")]
                 current_table.append(row)
         if current_table:
             tables.append(current_table)
+
         return tables
     except Exception as e:
-        print("Error parsing GPT-4o response:", e)
+        print("❌ Error parsing GPT-4o response:", e)
         return []
 
+
 def save_table_to_csv(table, csv_path):
-    with open(csv_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        for row in table:
-            writer.writerow(row)
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerows(table)
 
-def methodO1(folder_path, api_key, output_path):
-    for filename in os.listdir(folder_path):
-        if filename.lower().endswith(".png"):
-            image_path = os.path.join(folder_path, filename)
-            print(f"Processing {filename} with GPT-4o...")
 
-            tables = extract_tables_with_gpto1(api_key, image_path)
-            for i, table in enumerate(tables):
-                csv_name = f"{os.path.splitext(filename)[0]}_gpto1_table_{i + 1}.csv"
-                csv_path = os.path.join(output_path, csv_name)
-                save_table_to_csv(table, csv_path)
-                print(f"Saved table {i + 1} to {csv_path}")
+def methodO1(pdf_path, api_key, output_path):
+    print(f"📄 Extracting text from: {pdf_path}")
+    text_data = extract_text_with_pypdf2(pdf_path)
+
+    print(f"⚙️ Sending extracted text to GPT-4o for table parsing...")
+    tables = extract_tables_with_gpt4o_text(api_key, text_data)
+
+    os.makedirs(output_path, exist_ok=True)
+    for i, table in enumerate(tables):
+        csv_name = (
+            f"{os.path.splitext(os.path.basename(pdf_path))[0]}_gpto1_table_{i + 1}.csv"
+        )
+        csv_path = os.path.join(output_path, csv_name)
+        save_table_to_csv(table, csv_path)
+        print(f"✔ Saved table {i + 1} to {csv_path}")

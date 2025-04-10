@@ -1,87 +1,108 @@
 import os
 import base64
-import requests
 import csv
-from PIL import Image
+from PyPDF2 import PdfReader, PdfWriter
+from dotenv import load_dotenv
+from anthropic import Anthropic
+import random
+import time
 
-def encode_image_to_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
+load_dotenv()
+# Claude client
+client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-def extract_tables_with_claude(api_key, image_path):
-    image_base64 = encode_image_to_base64(image_path)
 
-    headers = {
-    "x-api-key": "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",
-    "Content-Type": "application/json",
-    "anthropic-version": "2023-06-01"
-}
 
-    data = {
-        "model": "claude-3-7-sonnet-20250219",  # Sonnet model
-        "messages": [
+def split_pdf(input_pdf_path, output_dir, pages_per_split=5):
+    os.makedirs(output_dir, exist_ok=True)
+    reader = PdfReader(input_pdf_path)
+    total_pages = len(reader.pages)
+    split_paths = []
+
+    for start in range(0, total_pages, pages_per_split):
+        writer = PdfWriter()
+        for i in range(start, min(start + pages_per_split, total_pages)):
+            writer.add_page(reader.pages[i])
+        out_path = os.path.join(output_dir, f"split_{start // pages_per_split + 1}.pdf")
+        with open(out_path, "wb") as f:
+            writer.write(f)
+        split_paths.append(out_path)
+
+    return split_paths
+
+
+def call_claude_with_pdf(pdf_path, prompt):
+    with open(pdf_path, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode("utf-8")
+
+    message = client.messages.create(
+        model="claude-3-7-sonnet-20250219",
+        max_tokens=4096,
+        messages=[
             {
                 "role": "user",
                 "content": [
                     {
-                        "type": "text",
-                        "text": "Extract all tables from this image and return each as rows in CSV format. Only return plain CSV-formatted text."
-                    },
-                    {
-                        "type": "image",
+                        "type": "document",
                         "source": {
                             "type": "base64",
-                            "media_type": "image/png",
-                            "data": image_base64
-                        }
-                    }
-                ]
+                            "media_type": "application/pdf",
+                            "data": encoded,
+                        },
+                    },
+                    {"type": "text", "text": prompt},
+                ],
             }
         ],
-        "max_tokens": 4096,
-        "temperature": 0.2
-    }
+    )
 
-    response = requests.post("https://api.anthropic.com/v1/messages", headers=headers, json=data)
-    result = response.json()
+    if message.content:
+        return message.content[0].text
+    else:
+        print("❌ Claude API returned no content.")
+        return ""
 
-    try:
-        print("Raw Claude response:")
-        print(result)
-        text_response = result["content"][0]["text"]
-        tables = []
-        current_table = []
-        for line in text_response.strip().splitlines():
-            if line.strip() == "":
-                if current_table:
-                    tables.append(current_table)
-                    current_table = []
-            else:
-                row = [cell.strip() for cell in line.strip().split(",")]
-                current_table.append(row)
-        if current_table:
-            tables.append(current_table)
-        return tables
-    except Exception as e:
-        print("Error parsing Claude response:", e)
-        return []
 
-def save_table_to_csv(table, csv_path):
-    with open(csv_path, 'w', newline='') as csvfile:
+def extract_tables_from_text(text_response):
+    tables = []
+    current = []
+    for line in text_response.strip().splitlines():
+        if line.strip() == "":
+            if current:
+                tables.append(current)
+                current = []
+        else:
+            current.append([cell.strip() for cell in line.split(",")])
+    if current:
+        tables.append(current)
+    return tables
+
+
+def save_table_to_csv(table, output_csv_path):
+    with open(output_csv_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        for row in table:
-            writer.writerow(row)
+        writer.writerows(table)
 
-def methodClaude(folder_path, api_key, output_path):
-    
-    for filename in os.listdir(folder_path):
-        if filename.lower().endswith(".png"):
-            image_path = os.path.join(folder_path, filename)
-            print(f"Processing {filename} with Claude Sonnet...")
 
-            tables = extract_tables_with_claude(api_key, image_path)
-            for i, table in enumerate(tables):
-                csv_name = f"{os.path.splitext(filename)[0]}_claude_table_{i + 1}.csv"
-                csv_path = os.path.join(output_path, csv_name)
-                save_table_to_csv(table, csv_path)
-                print(f"Saved table {i + 1} to {csv_path}")
+def method_claude_sdk_pipeline(pdf_path, output_folder, pages_per_split=5):
+    os.makedirs(output_folder, exist_ok=True)
+    split_dir = os.path.join(output_folder, "splits")
+    split_files = split_pdf(pdf_path, split_dir, pages_per_split)
+
+    csv_files = []
+    table_index = 1
+    for split_pd in split_files:
+        print(f"Processing: {split_pd}")
+        text = call_claude_with_pdf(
+            split_pd, "Extract all tables as CSV. No explanation, just raw CSV."
+        )
+        tables = extract_tables_from_text(text)
+        for table in tables:
+            csv_path = os.path.join(output_folder, f"claude_table_{table_index}.csv")
+            save_table_to_csv(table, csv_path)
+            csv_files.append(csv_path)
+            print(f"✔ Saved: {csv_path}")
+            table_index += 1
+        sleep_time = random.uniform(1.5, 3.5)
+        print(f"⏳ Sleeping for {sleep_time:.2f} seconds before next request...")
+        time.sleep(sleep_time)

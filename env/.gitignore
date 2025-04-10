@@ -1,0 +1,17 @@
+# created by virtualenv automatically
+# Ignore the virtual environment
+env/
+
+# Ignore environment variables file
+.env
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Optional: ignore VS Code workspace settings
+.vscode/
+
+# Optional: output files or results
+output_folder/
+*.csv

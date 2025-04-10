@@ -1,0 +1,29 @@
+Subject,Course,Level,Title,Grade,Credit Hours,Quality Points,R
+AHS,101,UG,Wellness,C,2.000,4.00,
+COMM,101,UG,Public Speaking,A-,2.000,7.40,
+COMM,271,UG,Theater Survey,A-,4.000,14.80,
+COMM,373,UG,Theater Workout,P,0.000,0.00,I
+PSYC,268,UG,Statistics,B,4.000,12.00,
+ANTH,116,UG,Introduction to Anthropology,B,4.000,12.00,
+COMM,273,UG,Acting,A,4.000,16.00,
+ENGL,101,UG,Classics/Western Lit,B,4.000,12.00,
+GEOL,211,UG,Physical Geology,B-,4.000,10.80,
+MUIP,141,UG,Small Group Voice Lessons,A,1.000,4.00,
+COMM,370,UG,Shakespeare Practicum,A,1.000,4.00,
+ANTH,376,UG,Culture Theory,B,4.000,12.00,
+ARCH,213,UG,NT Archaeology,B+,4.000,13.20,
+COMM,474,UG,January Project,A,4.000,16.00,I
+GERM,103,UG,Accel Elem German,B-,4.000,10.80,
+ANTH,421,UG,Images of the Middle East,W,0.000,0.00,
+ANTH,482,UG,Ethnographic Theory & Method,W,0.000,0.00,
+COMM,493,UG,Mentoring: Int'l Scenography,A-,4.000,14.80,
+GERM,201,UG,Intermediate German,W,0.000,0.00,E
+MATH,000,UG,MATH 101 by exam (2hr eq),P,0.000,0.00,
+MUIP,104,UG,Private Lessons: Voice,A,2.000,8.00,
+SOC,228,UG,Sociology of Sexuality,W,0.000,0.00,
+COMM,312,UG,Communication Criticism,C,4.000,8.00,
+COMM,374,UG,Directing,A-,4.000,14.80,
+GEOL,311,UG,Geology of National Parks,B+,2.000,6.60,
+GERM,000,UG,Forgn Lang Comp Met,P,0.000,0.00,
+GERM,201,UG,Intermediate German,C+,4.000,9.20,I
+```
