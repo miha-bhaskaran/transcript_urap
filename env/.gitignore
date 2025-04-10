@@ -15,3 +15,6 @@ __pycache__/
 # Optional: output files or results
 output_folder/
 *.csv
+
+Data/
+Other/
