@@ -41,7 +41,7 @@ def method_claude(transcript_name, output_folder, orig):
     concatenate_csv_files(output_folder)
 
     file_a = output_folder + "/" + output_folder + "_combined.csv"
-    file_b = "validation/" + orig + ".csv"
+    file_b = "testing_validation/" + orig + ".csv"
     output = output_folder + "/MISSING_courses.csv"
     output2 = output_folder + "/MATCHED_courses.csv"
 
@@ -59,6 +59,8 @@ def method_o1(transcript_name, output_folder, orig):
     api_key = os.getenv("GPT4O_API_KEY")
     if not api_key:
         raise ValueError("Missing GPT4O_API_KEY in environment.")
+    
+    
 
     pdf_path = transcript_name + ".pdf"
     methodO1(pdf_path, api_key, output_folder)
@@ -66,12 +68,12 @@ def method_o1(transcript_name, output_folder, orig):
     concatenate_csv_files(output_folder)
 
     file_a = output_folder + "/" + output_folder + "_combined.csv"
-    file_b = "validation/" + orig + ".csv"
+    file_b = "testing_validation/" + orig + ".csv"
     output = output_folder + "/MISSING_courses.csv"
     output2 = output_folder + "/MATCHED_courses.csv"
 
     find_missing_courses(
-        file_a, file_b, output, output2, course_threshold=60, grade_threshold=50
+        file_a, file_b, output, output2, course_threshold=80, grade_threshold=70
     )
     post_process_method(output_folder, orig)
 
@@ -88,7 +90,7 @@ def post_process_method(output_folder, orig):
     # match_percentage(output_folder + '/' +'FINAL_post_process_REGEX.csv', 'testing_validation/'+ orig + '.csv')
     match_percentage(
         output_folder + "/" + "FINAL_post_process_REGEX.csv",
-        "validation/" + orig + ".csv",
+        "testing_validation/" + orig + ".csv",
     )
     print(
         "---------------------------------------------------------------------------------------------"
@@ -103,7 +105,7 @@ def post_process_method(output_folder, orig):
     # match_percentage(output_folder + '/' +'Final_post_processed_gpt4o.csv', 'testing_validation/'+ orig + '.csv')
     match_percentage(
         output_folder + "/" + "Final_post_processed_gpt4o.csv",
-        "validation/" + orig + ".csv",
+        "testing_validation/" + orig + ".csv",
     )
     print(
         output_folder,
@@ -111,32 +113,32 @@ def post_process_method(output_folder, orig):
     )
 
 
-output_folder = [
-    "asu",
-    "dickonson_uni",
-    "edmonds",
-    "g_r",
-    "taylor",
-    "trans",
-    "uva",
-    "va",
-    "west_mich",
-]
-transcript_name = [
-    "transcripts/asu",
-    "transcripts/dickonson_uni",
-    "transcripts/edmonds",
-    "transcripts/g_r",
-    "transcripts/taylor",
-    "transcripts/trans",
-    "transcripts/uva",
-    "transcripts/va",
-    "transcripts/west_mich",
-]
+# output_folder = [
+#     "asu",
+#     "dickonson_uni",
+#     "edmonds",
+#     "g_r",
+#     "taylor",
+#     "trans",
+#     "uva",
+#     "va",
+#     "west_mich",
+# ]
+# transcript_name = [
+#     "transcripts/asu",
+#     "transcripts/dickonson_uni",
+#     "transcripts/edmonds",
+#     "transcripts/g_r",
+#     "transcripts/taylor",
+#     "transcripts/trans",
+#     "transcripts/uva",
+#     "transcripts/va",
+#     "transcripts/west_mich",
+# ]
 
 
-# output_folder = ['depaul', 'mich_state_uni', 'suny', 'kutztown_upenn', 'wayne','western_mich_uni']
-# transcript_name = ['testing_transcripts/depaul', 'testing_transcripts/mich_state_uni', 'testing_transcripts/suny', 'testing_transcripts/kutztown_upenn', 'testing_transcripts/wayne','testing_transcripts/western_mich_uni']
+output_folder = ['depaul', 'mich_state_uni', 'suny', 'kutztown_upenn', 'wayne','western_mich_uni']
+transcript_name = ['testing_transcripts/depaul', 'testing_transcripts/mich_state_uni', 'testing_transcripts/suny', 'testing_transcripts/kutztown_upenn', 'testing_transcripts/wayne','testing_transcripts/western_mich_uni']
 
 # output_folder = ['wayne']
 # transcript_name = ['testing_transcripts/wayne']
@@ -150,6 +152,6 @@ transcript_name = [
 
 for i in range(len(output_folder)):
 
-    method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
+    #method_awsBoto(transcript_name[i], output_folder[i], output_folder[i])
     method_o1(transcript_name[i], output_folder[i], output_folder[i])
-    method_claude(transcript_name[i], output_folder[i], output_folder[i])
+    #method_claude(transcript_name[i], output_folder[i], output_folder[i])
